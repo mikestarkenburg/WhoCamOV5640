@@ -219,10 +219,10 @@ void setup() {
   config.pin_sscb_scl = SIOC_GPIO_NUM;
   config.pin_pwdn = PWDN_GPIO_NUM;
   config.pin_reset = RESET_GPIO_NUM;
-  config.xclk_freq_hz = 20000000;
+  config.xclk_freq_hz = 10000000;
   config.pixel_format = PIXFORMAT_JPEG;
-  config.frame_size = FRAMESIZE_UXGA;
-  config.jpeg_quality = 4;
+  config.frame_size = FRAMESIZE_QSXGA;
+  config.jpeg_quality = 10;
   config.fb_count = 2;
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK) {
