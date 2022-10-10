@@ -3,8 +3,6 @@
 // NOTE: FTP port 2121 hardcoded into the ESP32_FTPClient Library!!
 // Left to do:
 //     flip camera
-//     get max 5640 resolution
-//     kill unnecessary webserver crap
 //     possibly fix gain problems?
 //     possibly check on 5640 autofocus
 //     possibly check on 5640 digital zoom 
@@ -26,7 +24,6 @@
 #include "soc/rtc_cntl_reg.h"  // Disable brownout problems
 #include "driver/rtc_io.h"
 #include "time.h"
-#include "ESPAsyncWebServer.h"
 #include "StringArray.h"
 #include "SPIFFS.h"
 #include "FS.h"
@@ -106,37 +103,9 @@ char ftpPhoto[25] = "yyyy-mm-dd_hh-mm-ss.jpg";
 #define HREF_GPIO_NUM     25
 #define PCLK_GPIO_NUM     19
 
-const char index_html[] PROGMEM = R"rawliteral(
-<!DOCTYPE HTML><html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { text-align:center; }
-    .vert { margin-bottom: 10%; }
-    .hori{ margin-bottom: 0%; }
-  </style>
-</head>
-<body>
-  <div id="container">
-    <h2>WHOISINMYSPOT!!!!</h2>
-    <p></p>
-    <p>
-      <button onclick="location.reload();">REFRESH PAGE</button>
-    </p>
-  </div>
-  <div><img src="saved-photo" id="photo" width="70%"></div>
-</body>
-</html>)rawliteral";
-
-
-// ++++++++++++++++++++++++++++++++++ Create Servers
 
 // Create FTP Server, last 2 args are timeout and debug mode
 ESP32_FTPClient ftp (ftp_server, ftp_user, ftp_pass, 5000, 2);
-
-// Create Webserver
-AsyncWebServer server(80);
-
 
 // ++++++++++++++++++++++++++++++++++ SETUP
 
