@@ -84,7 +84,7 @@ char ftpPhoto[25] = "yyyy-mm-dd_hh-mm-ss.jpg";
 #define PCLK_GPIO_NUM     19
 
 
-// Create FTP Server, last 2 args are timeout and debug mode
+// Create FTP Client, last 2 args are timeout and debug mode
 ESP32_FTPClient ftp (ftp_server, ftp_user, ftp_pass, 5000, 2);
 
 // ++++++++++++++++++++++++++++++++++ SETUP
@@ -122,8 +122,6 @@ void setup() {
   Serial.print("IP Address: http://");
   Serial.println(WiFi.localIP());
 
-  Serial.println("FTP Up...");
-
   // Init NTP
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
   Serial.println("NTP Up...");
@@ -158,7 +156,7 @@ void setup() {
   config.pin_sscb_scl = SIOC_GPIO_NUM;
   config.pin_pwdn = PWDN_GPIO_NUM;
   config.pin_reset = RESET_GPIO_NUM;
-  config.xclk_freq_hz = 10000000;
+  config.xclk_freq_hz = 6000000;
   config.pixel_format = PIXFORMAT_JPEG;
   config.frame_size = FRAMESIZE_QSXGA;
   config.jpeg_quality = 10;
@@ -190,8 +188,8 @@ void setup() {
   //  s->set_wpc(s, 1);            // 0 = disable , 1 = enable
   //  s->set_raw_gma(s, 1);        // 0 = disable , 1 = enable
   //  s->set_lenc(s, 1);           // 0 = disable , 1 = enable
-    s->set_hmirror(s, 1);        // 0 = disable , 1 = enable
-    s->set_vflip(s, 1);          // 0 = disable , 1 = enable
+  //  s->set_hmirror(s, 0);        // 0 = disable , 1 = enable
+      s->set_vflip(s, 1);          // 0 = disable , 1 = enable
   //  s->set_dcw(s, 1);            // 0 = disable , 1 = enable
   //  s->set_colorbar(s, 0);       // 0 = disable , 1 = enable   
   Serial.println("Camera Settings Modified...");
