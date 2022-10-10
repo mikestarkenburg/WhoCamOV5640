@@ -1,8 +1,0 @@
-Writing a buffer to FTP
-Close File
-Connection closed
-Pic uploaded as 2022-10-09_18-41-58.jpg - Size: 176128 bytes
-Going to sleep...
-[ 10961][V][WiFiGeneric.cpp:360] _arduino_event_cb(): STA Disconnected: SSID: starkhome, BSSID: 74:83:c2:03:e1:96, Reason: 8
-[ 10968][D][WiFiGeneric.cpp:929] _eventCallback(): Arduino Event: 5 - STA_DISCONNECTED
-[ 10968][V][WiFiGeneric.cpp:341] _
