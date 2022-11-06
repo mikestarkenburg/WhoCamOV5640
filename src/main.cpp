@@ -1,8 +1,8 @@
-// whocam5640 2022-10-08
+// whocam5640 2022-11-05
 // mike@starkenburg.com
 // NOTE: FTP port 2121 hardcoded into the ESP32_FTPClient Library!!
 // Left to do:
-//     possibly fix gain problems?
+//     fix gain problems
 //     possibly check on 5640 autofocus
 //     possibly check on 5640 digital zoom 
 //     battery level
@@ -103,40 +103,7 @@ void setup() {
   Serial.println("Cycles since last hard reset: " + String(cycleCount));
   print_wakeup_reason();
 
-  // Init Wi-Fi
-  Serial.println("Connecting to WiFi... ");
-  WiFi.begin(ssid, password);
-  // Keep track of when we started our attempt to get a WiFi connection
-  unsigned long startAttemptTime = millis();
-  // Keep looping while we're not connected AND haven't reached the timeout
-  while (WiFi.status() != WL_CONNECTED &&
-         millis() - startAttemptTime < WIFI_TIMEOUT) {
-    delay(10);
-  }
-  // Make sure that we're actually connected, otherwise go to deep sleep
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("Wifi Connection FAILED");
-    goToDeepSleep();
-  }
-  Serial.println("Wifi Connected!");
-  Serial.print("IP Address: http://");
-  Serial.println(WiFi.localIP());
-
-  // Init NTP
-  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-  Serial.println("NTP Up...");
-
-  // Init SPIFFS
-  if (!SPIFFS.begin(true)) {
-    Serial.println("An Error has occurred while mounting SPIFFS");
-    ESP.restart();
-  }
-  else {
-    delay(500);
-    Serial.println("SPIFFS Up...");
-  }
-
-  // Init Camera
+ // Init Camera
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
   config.ledc_timer = LEDC_TIMER_0;
@@ -174,8 +141,7 @@ void setup() {
     s->set_gain_ctrl(s, 1);      // 0 = disable , 1 = enable
     s->set_vflip(s, 1);          // 0 = disable , 1 = enable
     s->set_awb_gain(s, 1);       // 0 = disable , 1 = enable
-    s->set_wb_mode(s, 1);        // 0 to 4 - if awb_gain enabled (0 - Auto, 1 - Sunny, 2 - Cloudy, 3 - Office, 4 - Home)
-
+   //  s->set_wb_mode(s, 1);        // 0 to 4 - if awb_gain enabled (0 - Auto, 1 - Sunny, 2 - Cloudy, 3 - Office, 4 - Home)
    //  s->set_brightness(s, 0);     // -2 to 2
    //  s->set_contrast(s, 0);       // -2 to 2
    //  s->set_saturation(s, 0);     // -2 to 2
@@ -195,6 +161,40 @@ void setup() {
    //  s->set_colorbar(s, 0);       // 0 = disable , 1 = enable   
   Serial.println("Camera Settings Modified...");
 
+  // Init Wi-Fi
+  Serial.println("Connecting to WiFi... ");
+  WiFi.begin(ssid, password);
+  // Keep track of when we started our attempt to get a WiFi connection
+  unsigned long startAttemptTime = millis();
+  // Keep looping while we're not connected AND haven't reached the timeout
+  while (WiFi.status() != WL_CONNECTED &&
+         millis() - startAttemptTime < WIFI_TIMEOUT) {
+    delay(10);
+  }
+  // Make sure that we're actually connected, otherwise go to deep sleep
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Wifi Connection FAILED");
+    goToDeepSleep();
+  }
+  Serial.println("Wifi Connected!");
+  Serial.print("IP Address: http://");
+  Serial.println(WiFi.localIP());
+
+  // Init NTP
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+  Serial.println("NTP Up...");
+
+  // Init SPIFFS
+  if (!SPIFFS.begin(true)) {
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    ESP.restart();
+  }
+  else {
+    delay(500);
+    Serial.println("SPIFFS Up...");
+  }
+
+ 
   // Faux Loop (for DeepSleep) Starts Here
 
   FindLocalTime();            // get Current Date-Time
