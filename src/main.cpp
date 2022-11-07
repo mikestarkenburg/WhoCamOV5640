@@ -1,4 +1,4 @@
-// whocam5640 2022-11-05
+// whocam5640 2022-11-06
 // mike@starkenburg.com
 // NOTE: FTP port 2121 hardcoded into the ESP32_FTPClient Library!!
 // Left to do:
@@ -65,24 +65,41 @@ int fileSize = 0;
 char ftpPhoto[25] = "yyyy-mm-dd_hh-mm-ss.jpg";
 #define FILE_PHOTO "/photo.jpg"
 
-// PINS for TTGO-Camera
-#define PWDN_GPIO_NUM     26
-#define RESET_GPIO_NUM    -1
-#define XCLK_GPIO_NUM     32
-#define SIOD_GPIO_NUM     13
-#define SIOC_GPIO_NUM     12
-#define Y9_GPIO_NUM       39
-#define Y8_GPIO_NUM       36
-#define Y7_GPIO_NUM       23
-#define Y6_GPIO_NUM       18
-#define Y5_GPIO_NUM       15
-#define Y4_GPIO_NUM       4
-#define Y3_GPIO_NUM       14
-#define Y2_GPIO_NUM        5
-#define VSYNC_GPIO_NUM    27
-#define HREF_GPIO_NUM     25
-#define PCLK_GPIO_NUM     19
+// PINS for Orig Whocam TTGO-Camera
+// #define PWDN_GPIO_NUM     26
+// #define RESET_GPIO_NUM    -1
+// #define XCLK_GPIO_NUM     32
+// #define SIOD_GPIO_NUM     13
+// #define SIOC_GPIO_NUM     12
+// #define Y9_GPIO_NUM       39
+// #define Y8_GPIO_NUM       36
+// #define Y7_GPIO_NUM       23
+// #define Y6_GPIO_NUM       18
+// #define Y5_GPIO_NUM       15
+// #define Y4_GPIO_NUM       4
+// #define Y3_GPIO_NUM       14
+// #define Y2_GPIO_NUM        5
+// #define VSYNC_GPIO_NUM    27
+// #define HREF_GPIO_NUM     25
+// #define PCLK_GPIO_NUM     19
 
+// PINS for 1.6.2 w mic TTGO-Camera
+#define PWDN_GPIO_NUM     -1
+#define RESET_GPIO_NUM    -1
+#define XCLK_GPIO_NUM     4
+#define SIOD_GPIO_NUM     18
+#define SIOC_GPIO_NUM     23
+#define Y9_GPIO_NUM       36
+#define Y8_GPIO_NUM       37
+#define Y7_GPIO_NUM       38
+#define Y6_GPIO_NUM       39
+#define Y5_GPIO_NUM       35
+#define Y4_GPIO_NUM       14
+#define Y3_GPIO_NUM       13
+#define Y2_GPIO_NUM       34
+#define VSYNC_GPIO_NUM    5
+#define HREF_GPIO_NUM     27
+#define PCLK_GPIO_NUM     25
 
 // Create FTP Client, last 2 args are timeout and debug mode
 ESP32_FTPClient ftp (ftp_server, ftp_user, ftp_pass, 5000, 2);
@@ -93,7 +110,7 @@ void setup() {
 
   // Init Serial port
   Serial.begin(115200);
-  Serial.println("WhoCam5640 2022-10-09 TTGO-Camera");
+  Serial.println("WhoCam5640 2022-11-06 TTGO-Camera");
 
   // UN-init 'brownout detector'
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
