@@ -154,9 +154,9 @@ void setup() {
 
   // Modify Camera Settings
   sensor_t * s = esp_camera_sensor_get();
+       s->set_vflip(s, 1);          // 0 = disable , 1 = enable
    //  s->set_exposure_ctrl(s, 1);  // 0 = disable , 1 = enable
    //  s->set_gain_ctrl(s, 1);      // 0 = disable , 1 = enable
-   //  s->set_vflip(s, 1);          // 0 = disable , 1 = enable
    //  s->set_awb_gain(s, 1);       // 0 = disable , 1 = enable
    //  s->set_wb_mode(s, 1);        // 0 to 4 - if awb_gain enabled (0 - Auto, 1 - Sunny, 2 - Cloudy, 3 - Office, 4 - Home)
    //  s->set_brightness(s, 0);     // -2 to 2
@@ -213,10 +213,8 @@ void setup() {
 
  
   // Faux Loop (for DeepSleep) Starts Here
-
+  delay(10000);               // wait 10 seconds for camera to stabilise
   FindLocalTime();            // get Current Date-Time
-  capturePhotoSaveSpiffs();   // take photo, wait until the buffer is written to spiffs
-  capturePhotoSaveSpiffs();   // take photo, wait until the buffer is written to spiffs
   capturePhotoSaveSpiffs();   // take photo, wait until the buffer is written to spiffs
   uploadFTP();                // upload the buffer to pride names datetime
   goToDeepSleep();            // sleep and start next cycle.
