@@ -140,10 +140,10 @@ void setup() {
   config.pin_sscb_scl = SIOC_GPIO_NUM;
   config.pin_pwdn = PWDN_GPIO_NUM;
   config.pin_reset = RESET_GPIO_NUM;
-  config.xclk_freq_hz = 6000000;
+  config.xclk_freq_hz = 1000000;
   config.pixel_format = PIXFORMAT_JPEG;
   config.frame_size = FRAMESIZE_QSXGA;
-  config.jpeg_quality = 10;
+  config.jpeg_quality = 8;
   config.fb_count = 2;
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK) {
@@ -154,29 +154,29 @@ void setup() {
 
   // Modify Camera Settings
   sensor_t * s = esp_camera_sensor_get();
-       s->set_vflip(s, 1);          // 0 = disable , 1 = enable
-   //  s->set_exposure_ctrl(s, 1);  // 0 = disable , 1 = enable
-   //  s->set_gain_ctrl(s, 1);      // 0 = disable , 1 = enable
-   //  s->set_awb_gain(s, 1);       // 0 = disable , 1 = enable
-   //  s->set_wb_mode(s, 1);        // 0 to 4 - if awb_gain enabled (0 - Auto, 1 - Sunny, 2 - Cloudy, 3 - Office, 4 - Home)
-   //  s->set_brightness(s, 0);     // -2 to 2
-   //  s->set_contrast(s, 0);       // -2 to 2
-   //  s->set_saturation(s, 0);     // -2 to 2
-   //  s->set_special_effect(s, 0); // 0 to 6 (0 - No Effect, 1 - Negative, 2 - Grayscale, 3 - Red Tint, 4 - Green Tint, 5 - Blue Tint, 6 - Sepia)
-   //  s->set_whitebal(s, 1);       // 0 = disable , 1 = enable
-   //  s->set_aec2(s, 1);           // 0 = disable , 1 = enable
+     s->set_vflip(s, 1);          // 0 = disable , 1 = enable
+     s->set_exposure_ctrl(s, 1);  // 0 = disable , 1 = enable
+     s->set_gain_ctrl(s, 0);      // 0 = disable , 1 = enable
+     s->set_whitebal(s, 1);       // 0 = disable , 1 = enable
+     s->set_awb_gain(s, 1);       // 0 = disable , 1 = enable
+     s->set_wb_mode(s, 0);        // 0 to 4 - if awb_gain enabled (0 - Auto, 1 - Sunny, 2 - Cloudy, 3 - Office, 4 - Home)
+     s->set_brightness(s, 0);     // -2 to 2
+     s->set_contrast(s, -2);       // -2 to 2
+     s->set_saturation(s, -2);     // -2 to 2
+     s->set_special_effect(s, 0); // 0 to 6 (0 - No Effect, 1 - Negative, 2 - Grayscale, 3 - Red Tint, 4 - Green Tint, 5 - Blue Tint, 6 - Sepia)
+     s->set_aec2(s, 0);           // 0 = disable , 1 = enable
    //  s->set_ae_level(s, 0);       // -2 to 2
    //  s->set_aec_value(s, 300);    // 0 to 1200
-   //  s->set_agc_gain(s, 0);       // 0 to 30
-   //  s->set_gainceiling(s, (gainceiling_t)0);  // 0 to 6
-   //  s->set_bpc(s, 0);            // 0 = disable , 1 = enable
-   //  s->set_wpc(s, 0);            // 0 = disable , 1 = enable
-   //  s->set_raw_gma(s, 1);        // 0 = disable , 1 = enable
-   //  s->set_lenc(s, 0);           // 0 = disable , 1 = enable
-   //  s->set_hmirror(s, 0);        // 0 = disable , 1 = enable
-   //  s->set_dcw(s, 0);            // 0 = disable , 1 = enable
-   //  s->set_colorbar(s, 0);       // 0 = disable , 1 = enable   
-  Serial.println("Camera Settings Modified...");
+     s->set_agc_gain(s, 0);       // 0 to 30
+     s->set_gainceiling(s, (gainceiling_t)6);  // 0 to 6
+     s->set_bpc(s, 1);            // 0 = disable , 1 = enable
+     s->set_wpc(s, 1);            // 0 = disable , 1 = enable
+     s->set_raw_gma(s, 1);        // 0 = disable , 1 = enable
+     s->set_lenc(s, 0);           // 0 = disable , 1 = enable
+     s->set_hmirror(s, 0);        // 0 = disable , 1 = enable
+     s->set_dcw(s, 0);            // 0 = disable , 1 = enable
+     s->set_colorbar(s, 0);       // 0 = disable , 1 = enable   
+    Serial.println("Camera Settings Modified...");
 
   // Init Wi-Fi
   Serial.println("Connecting to WiFi... ");
@@ -213,6 +213,7 @@ void setup() {
 
  
   // Faux Loop (for DeepSleep) Starts Here
+  Serial.println("Waiting 10 seconds for Camera to Stabilize...");
   delay(10000);               // wait 10 seconds for camera to stabilise
   FindLocalTime();            // get Current Date-Time
   capturePhotoSaveSpiffs();   // take photo, wait until the buffer is written to spiffs
