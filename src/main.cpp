@@ -66,40 +66,40 @@ char ftpPhoto[25] = "yyyy-mm-dd_hh-mm-ss.jpg";
 #define FILE_PHOTO "/photo.jpg"
 
 // PINS for Orig Whocam TTGO-Camera
-// #define PWDN_GPIO_NUM     26
-// #define RESET_GPIO_NUM    -1
-// #define XCLK_GPIO_NUM     32
-// #define SIOD_GPIO_NUM     13
-// #define SIOC_GPIO_NUM     12
-// #define Y9_GPIO_NUM       39
-// #define Y8_GPIO_NUM       36
-// #define Y7_GPIO_NUM       23
-// #define Y6_GPIO_NUM       18
-// #define Y5_GPIO_NUM       15
-// #define Y4_GPIO_NUM       4
-// #define Y3_GPIO_NUM       14
-// #define Y2_GPIO_NUM        5
-// #define VSYNC_GPIO_NUM    27
-// #define HREF_GPIO_NUM     25
-// #define PCLK_GPIO_NUM     19
+#define PWDN_GPIO_NUM     26
+#define RESET_GPIO_NUM    -1
+#define XCLK_GPIO_NUM     32
+#define SIOD_GPIO_NUM     13
+#define SIOC_GPIO_NUM     12
+#define Y9_GPIO_NUM       39
+#define Y8_GPIO_NUM       36
+#define Y7_GPIO_NUM       23
+#define Y6_GPIO_NUM       18
+#define Y5_GPIO_NUM       15
+#define Y4_GPIO_NUM       4
+#define Y3_GPIO_NUM       14
+#define Y2_GPIO_NUM        5
+#define VSYNC_GPIO_NUM    27
+#define HREF_GPIO_NUM     25
+#define PCLK_GPIO_NUM     19
 
 // PINS for 1.6.2 w mic TTGO-Camera
-#define PWDN_GPIO_NUM     -1
-#define RESET_GPIO_NUM    -1
-#define XCLK_GPIO_NUM     4
-#define SIOD_GPIO_NUM     18
-#define SIOC_GPIO_NUM     23
-#define Y9_GPIO_NUM       36
-#define Y8_GPIO_NUM       37
-#define Y7_GPIO_NUM       38
-#define Y6_GPIO_NUM       39
-#define Y5_GPIO_NUM       35
-#define Y4_GPIO_NUM       14
-#define Y3_GPIO_NUM       13
-#define Y2_GPIO_NUM       34
-#define VSYNC_GPIO_NUM    5
-#define HREF_GPIO_NUM     27
-#define PCLK_GPIO_NUM     25
+// #define PWDN_GPIO_NUM     -1
+// #define RESET_GPIO_NUM    -1
+// #define XCLK_GPIO_NUM     4
+// #define SIOD_GPIO_NUM     18
+// #define SIOC_GPIO_NUM     23
+// #define Y9_GPIO_NUM       36
+// #define Y8_GPIO_NUM       37
+// #define Y7_GPIO_NUM       38
+// #define Y6_GPIO_NUM       39
+// #define Y5_GPIO_NUM       35
+// #define Y4_GPIO_NUM       14
+// #define Y3_GPIO_NUM       13
+// #define Y2_GPIO_NUM       34
+// #define VSYNC_GPIO_NUM    5
+// #define HREF_GPIO_NUM     27
+// #define PCLK_GPIO_NUM     25
 
 // Create FTP Client, last 2 args are timeout and debug mode
 ESP32_FTPClient ftp (ftp_server, ftp_user, ftp_pass, 5000, 2);
@@ -154,10 +154,10 @@ void setup() {
 
   // Modify Camera Settings
   sensor_t * s = esp_camera_sensor_get();
-    s->set_exposure_ctrl(s, 1);  // 0 = disable , 1 = enable
-    s->set_gain_ctrl(s, 1);      // 0 = disable , 1 = enable
-    s->set_vflip(s, 1);          // 0 = disable , 1 = enable
-    s->set_awb_gain(s, 1);       // 0 = disable , 1 = enable
+   //  s->set_exposure_ctrl(s, 1);  // 0 = disable , 1 = enable
+   //  s->set_gain_ctrl(s, 1);      // 0 = disable , 1 = enable
+   //  s->set_vflip(s, 1);          // 0 = disable , 1 = enable
+   //  s->set_awb_gain(s, 1);       // 0 = disable , 1 = enable
    //  s->set_wb_mode(s, 1);        // 0 to 4 - if awb_gain enabled (0 - Auto, 1 - Sunny, 2 - Cloudy, 3 - Office, 4 - Home)
    //  s->set_brightness(s, 0);     // -2 to 2
    //  s->set_contrast(s, 0);       // -2 to 2
@@ -215,6 +215,8 @@ void setup() {
   // Faux Loop (for DeepSleep) Starts Here
 
   FindLocalTime();            // get Current Date-Time
+  capturePhotoSaveSpiffs();   // take photo, wait until the buffer is written to spiffs
+  capturePhotoSaveSpiffs();   // take photo, wait until the buffer is written to spiffs
   capturePhotoSaveSpiffs();   // take photo, wait until the buffer is written to spiffs
   uploadFTP();                // upload the buffer to pride names datetime
   goToDeepSleep();            // sleep and start next cycle.
