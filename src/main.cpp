@@ -1,13 +1,19 @@
-// whocam5640 2022-11-06
+//
+// whoisinmyspot.com OV5640 Camera Module 
 // mike@starkenburg.com
 // NOTE: FTP port 2121 hardcoded into the ESP32_FTPClient Library!!
+//
+
+#define SKETCHNAME "WhoCam5640"
+#define SKETCHVER 2022112601
+
 // Left to do:
 //     fix gain problems
-//     possibly check on 5640 autofocus
-//     possibly check on 5640 digital zoom 
+//     ota
 //     battery level
 //     logging
-//     ota
+//     possibly check on 5640 autofocus
+//     possibly check on 5640 digital zoom 
 
 
 // ++++++++++++++++++++++++++++++++++ INCLUDES
@@ -23,7 +29,7 @@
 #include "soc/rtc_cntl_reg.h"  // Disable brownout problems
 #include "driver/rtc_io.h"
 #include "time.h"
-#include "StringArray.h"
+// #include "StringArray.h"  // likely not needed, maybe able to remove
 #include "SPIFFS.h"
 #include "FS.h"
 
@@ -110,8 +116,9 @@ void setup() {
 
   // Init Serial port
   Serial.begin(115200);
-  Serial.println("WhoCam5640 2022-11-06 TTGO-Camera");
-
+  Serial.println(SKETCHNAME);
+  Serial.println(SKETCHVER);
+  
   // UN-init 'brownout detector'
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
 
@@ -160,22 +167,22 @@ void setup() {
      s->set_whitebal(s, 1);       // 0 = disable , 1 = enable
      s->set_awb_gain(s, 1);       // 0 = disable , 1 = enable
      s->set_wb_mode(s, 0);        // 0 to 4 - if awb_gain enabled (0 - Auto, 1 - Sunny, 2 - Cloudy, 3 - Office, 4 - Home)
-     s->set_brightness(s, 0);     // -2 to 2
-     s->set_contrast(s, -2);       // -2 to 2
-     s->set_saturation(s, -2);     // -2 to 2
+     s->set_brightness(s, -2);     // -2 to 2
+     s->set_contrast(s, 0);       // -2 to 2
+     s->set_saturation(s, 0);     // -2 to 2
      s->set_special_effect(s, 0); // 0 to 6 (0 - No Effect, 1 - Negative, 2 - Grayscale, 3 - Red Tint, 4 - Green Tint, 5 - Blue Tint, 6 - Sepia)
      s->set_aec2(s, 1);           // 0 = disable , 1 = enable
      s->set_ae_level(s, -2);       // -2 to 2
-     s->set_aec_value(s, 300);    // 0 to 1200
-     s->set_agc_gain(s, 0);       // 0 to 30
+   //  s->set_aec_value(s, 300);    // 0 to 1200
+   //  s->set_agc_gain(s, 0);       // 0 to 30
    //  s->set_gainceiling(s, (gainceiling_t)6);  // 0 to 6
-     s->set_bpc(s, 1);            // 0 = disable , 1 = enable
-     s->set_wpc(s, 1);            // 0 = disable , 1 = enable
+   //  s->set_bpc(s, 1);            // 0 = disable , 1 = enable
+   //  s->set_wpc(s, 1);            // 0 = disable , 1 = enable
    //  s->set_raw_gma(s, 1);        // 0 = disable , 1 = enable
-     s->set_lenc(s, 0);           // 0 = disable , 1 = enable
-     s->set_hmirror(s, 0);        // 0 = disable , 1 = enable
-     s->set_dcw(s, 1);            // 0 = disable , 1 = enable
-     s->set_colorbar(s, 0);       // 0 = disable , 1 = enable   
+   //  s->set_lenc(s, 0);           // 0 = disable , 1 = enable
+   //  s->set_hmirror(s, 0);        // 0 = disable , 1 = enable
+   //  s->set_dcw(s, 1);            // 0 = disable , 1 = enable
+   //  s->set_colorbar(s, 0);       // 0 = disable , 1 = enable   
     Serial.println("Camera Settings Modified...");
 
   // Init Wi-Fi
