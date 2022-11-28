@@ -46,7 +46,7 @@ void FindLocalTime();
 
 // Deep Sleep Variables
 RTC_DATA_ATTR int cycleCount = 0;
-#define SLEEPTIME 4.75 // time in minutes for each deep sleep cycle
+#define SLEEPTIME 9.75 // time in minutes for each deep sleep cycle
 
 // NTP variables
 const char* ntpServer = "pool.ntp.org";  // possible optimization here, setup local NTP and use IP addr.
