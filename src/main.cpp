@@ -5,7 +5,7 @@
 //
 
 #define SKETCHNAME "WhoCam5640"
-#define SKETCHVER 2022112701
+#define SKETCHVER 2022112901
 
 // Left to do:
 //     fix gain problems
@@ -149,8 +149,8 @@ void setup() {
   config.pin_reset = RESET_GPIO_NUM;
   config.xclk_freq_hz = 10000000;
   config.pixel_format = PIXFORMAT_JPEG;
-  config.frame_size = FRAMESIZE_UXGA;
-  config.jpeg_quality = 12;
+  config.frame_size = FRAMESIZE_QHD;
+  config.jpeg_quality = 8;
   config.fb_count = 2;
 
 
