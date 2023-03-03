@@ -54,7 +54,7 @@ const int   daylightOffset_sec = 3600;
 
 // Wifi variables
 #define WIFI_TIMEOUT 10000 // 10seconds in milliseconds
-const char* ssid = "starkhome";
+const char* ssid = "starklegacy";
 const char* password = "starkenburg";
 
 // FTP variables
@@ -162,7 +162,7 @@ void setup() {
 
   // Modify Camera Settings
   sensor_t * s = esp_camera_sensor_get();
-   s->set_vflip(s, 1);          // 0 = disable , 1 = enable
+   s->set_vflip(s, 0);          // 0 = disable , 1 = enable
    s->set_whitebal(s, 1);       // 0 = disable , 1 = enable
    s->set_awb_gain(s, 1);       // 0 = disable , 1 = enable
    s->set_wb_mode(s, 0);        // 0 to 4 - if awb_gain enabled (0 - Auto, 1 - Sunny, 2 - Cloudy, 3 - Office, 4 - Home)
@@ -185,7 +185,7 @@ void setup() {
    //  s->set_hmirror(s, 0);        // 0 = disable , 1 = enable
    //  s->set_dcw(s, 1);            // 0 = disable , 1 = enable
    //  s->set_colorbar(s, 0);       // 0 = disable , 1 = enable   
-    Serial.println("Camera Settings Modified...");
+  Serial.println("Camera Settings Modified...");
 
   // Init Wi-Fi
   Serial.println("Connecting to WiFi... ");
