@@ -162,6 +162,7 @@ void setup() {
 
   // Modify Camera Settings
   sensor_t * s = esp_camera_sensor_get();
+   s->set_hmirror(s, 1);        // 0 = disable , 1 = enable
    s->set_vflip(s, 0);          // 0 = disable , 1 = enable
    s->set_whitebal(s, 1);       // 0 = disable , 1 = enable
    s->set_awb_gain(s, 1);       // 0 = disable , 1 = enable
@@ -182,7 +183,6 @@ void setup() {
    //  s->set_wpc(s, 1);            // 0 = disable , 1 = enable
    //  s->set_raw_gma(s, 1);        // 0 = disable , 1 = enable
    //  s->set_lenc(s, 0);           // 0 = disable , 1 = enable
-   //  s->set_hmirror(s, 0);        // 0 = disable , 1 = enable
    //  s->set_dcw(s, 1);            // 0 = disable , 1 = enable
    //  s->set_colorbar(s, 0);       // 0 = disable , 1 = enable   
   Serial.println("Camera Settings Modified...");
