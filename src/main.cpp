@@ -149,10 +149,10 @@ void setup() {
   config.pin_sscb_scl = SIOC_GPIO_NUM;
   config.pin_pwdn = PWDN_GPIO_NUM;
   config.pin_reset = RESET_GPIO_NUM;
-  config.xclk_freq_hz = 6000000;
+  config.xclk_freq_hz = 600000;
   config.pixel_format = PIXFORMAT_JPEG;
-  config.frame_size = FRAMESIZE_QSXGA;
-  config.jpeg_quality = 12;
+  config.frame_size = FRAMESIZE_QHD;
+  config.jpeg_quality = 14;
   config.fb_count = 2;
 
 
@@ -261,10 +261,12 @@ void goToDeepSleep() {
 
   // IF before 6AM or after 8PM Local time, use NIGHTSLEEPTIME
   if ((Hour < 6) || (Hour> 20)) {
+    Serial.println("Configuring for NIGHTSLEEPTIME");
     esp_sleep_enable_timer_wakeup(NIGHTSLEEPTIME * 60L * 1000000L);
   }
   // ELSE use DAYSLEEPTIME
   else {
+    Serial.println("Configuring for DAYSLEEPTIME");
     esp_sleep_enable_timer_wakeup(DAYSLEEPTIME * 60L * 1000000L);
   }
   // Go to sleep! Zzzz
@@ -347,9 +349,12 @@ void FindLocalTime(void) {
     Serial.println("Failed to obtain time");
     return;
   }
+  Serial.println("Current time is: ");
   Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+  Serial.println("Hour is: ");
+  Serial.println(Hour);
   strftime(ftpPhoto, sizeof(ftpPhoto), "%Y-%m-%d_%H-%M-%S.jpg", &timeinfo);
-  Serial.println("Here it is!!!:");
+  Serial.println("Filename is:");
   Serial.println(ftpPhoto);
 }
 
