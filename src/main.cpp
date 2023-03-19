@@ -5,9 +5,10 @@
 //
 
 #define SKETCHNAME "WhoCam5640"
-#define SKETCHVER 20230301
+#define SKETCHVER 20230318
 
 // Left to do:
+//     unhardcode 2121 because fix merged with library
 //     ota
 //     battery level
 //     logging
@@ -45,12 +46,14 @@ void FindLocalTime();
 
 // Deep Sleep Variables
 RTC_DATA_ATTR int cycleCount = 0;
-#define SLEEPTIME 9.75 // time in minutes for each deep sleep cycle
+#define DAYSLEEPTIME 9.75 // 10  minutes daytime deep sleep cycle
+#define NIGHTSLEEPTIME 59.75 // 60 minutes nighttime deep sleep cycle
 
 // NTP variables
 const char* ntpServer = "pool.ntp.org";  // possible optimization here, setup local NTP and use IP addr.
 const long  gmtOffset_sec = -28800;
 const int   daylightOffset_sec = 3600;
+int Hour;
 
 // Wifi variables
 #define WIFI_TIMEOUT 10000 // 10seconds in milliseconds
@@ -70,7 +73,7 @@ int fileSize = 0;
 char ftpPhoto[25] = "yyyy-mm-dd_hh-mm-ss.jpg";
 #define FILE_PHOTO "/photo.jpg"
 
-// PINS for Orig Whocam TTGO-Camera
+// PINS for 1.7 TTGO-Camera
 //#define PWDN_GPIO_NUM     26
 //#define RESET_GPIO_NUM    -1
 //#define XCLK_GPIO_NUM     32
@@ -146,10 +149,10 @@ void setup() {
   config.pin_sscb_scl = SIOC_GPIO_NUM;
   config.pin_pwdn = PWDN_GPIO_NUM;
   config.pin_reset = RESET_GPIO_NUM;
-  config.xclk_freq_hz = 10000000;
+  config.xclk_freq_hz = 6000000;
   config.pixel_format = PIXFORMAT_JPEG;
-  config.frame_size = FRAMESIZE_UXGA;
-  config.jpeg_quality = 10;
+  config.frame_size = FRAMESIZE_QSXGA;
+  config.jpeg_quality = 12;
   config.fb_count = 2;
 
 
@@ -168,7 +171,7 @@ void setup() {
    s->set_awb_gain(s, 1);       // 0 = disable , 1 = enable
    s->set_wb_mode(s, 0);        // 0 to 4 - if awb_gain enabled (0 - Auto, 1 - Sunny, 2 - Cloudy, 3 - Office, 4 - Home)
    s->set_aec2(s, 1);           // 0 = disable , 1 = enable
-   s->set_ae_level(s, -2);       // -2 to 2
+   s->set_ae_level(s, -1);       // -2 to 2
    
    //  s->set_exposure_ctrl(s, 1);  // 0 = disable , 1 = enable
    //  s->set_brightness(s, -2);     // -2 to 2
@@ -247,8 +250,7 @@ void print_wakeup_reason() {
   }
 }
 
-void goToDeepSleep()
-{
+void goToDeepSleep() {
   Serial.println("Going to sleep...");
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
@@ -256,7 +258,15 @@ void goToDeepSleep()
   esp_wifi_stop();
   esp_bt_controller_disable();
   // Configure the timer to wake us up!
-  esp_sleep_enable_timer_wakeup(SLEEPTIME * 60L * 1000000L);
+
+  // IF before 6AM or after 8PM Local time, use NIGHTSLEEPTIME
+  if ((Hour < 6) || (Hour> 20)) {
+    esp_sleep_enable_timer_wakeup(NIGHTSLEEPTIME * 60L * 1000000L);
+  }
+  // ELSE use DAYSLEEPTIME
+  else {
+    esp_sleep_enable_timer_wakeup(DAYSLEEPTIME * 60L * 1000000L);
+  }
   // Go to sleep! Zzzz
   esp_deep_sleep_start();
 }
@@ -332,6 +342,7 @@ void uploadFTP(void) {
 
 void FindLocalTime(void) {
   struct tm timeinfo;
+  Hour = timeinfo.tm_hour; // keep the current hour for sleep math
   if (!getLocalTime(&timeinfo)) {
     Serial.println("Failed to obtain time");
     return;
